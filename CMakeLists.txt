@@ -1,21 +1,14 @@
-﻿# CMakeList.txt : CMake project for AssessmentLogin, include source and define
-# project specific logic here.
-#
-cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required (VERSION 3.12)
 
-# Enable Hot Reload for MSVC compilers if supported.
-if (POLICY CMP0141)
-  cmake_policy(SET CMP0141 NEW)
-  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
-endif()
+set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "vcpkg_installed/x64-windows/include")
+#SET(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "vcpkg_installed/x64-windows/lib")
+
+find_package(boost REQUIRED beast)
 
 project ("AssessmentLogin")
 
-# Add source to this project's executable.
-add_executable (AssessmentLogin "AssessmentLogin.cpp" "AssessmentLogin.h")
+add_executable (LoginAssessment "AssessmentLogin.cpp" "AssessmentLogin.h")
 
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET AssessmentLogin PROPERTY CXX_STANDARD 20)
-endif()
+include_directories( ${Boost_INCLUDE_DIR} )
 
-# TODO: Add tests and install targets if needed.
+set_property(TARGET LoginAssessment PROPERTY CXX_STANDARD 20)
