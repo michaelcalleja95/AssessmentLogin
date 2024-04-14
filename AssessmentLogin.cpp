@@ -24,7 +24,7 @@
 
 constexpr auto VERSION = 11;                                        ///< http version 1.1
 constexpr auto WEBSITE = "testphp.vulnweb.com";                     ///< host to connect to
-constexpr auto ORIGIN = "http://testphp.vulnweb.com";              ///< simulation hostname origin
+constexpr auto ORIGIN = "http://testphp.vulnweb.com";               ///< simulation hostname origin
 constexpr auto REFERER = "http://testphp.vulnweb.com/login.php";    ///< simulation where the request originated from
 constexpr auto PORT = "80";                                         ///< HTTP port
 constexpr auto TARGET = "/userinfo.php";                            ///< target site on the host
@@ -36,7 +36,7 @@ int main()
     {
         //initial setup to connect to the site
         boost::asio::io_context context;
-        const boost::asio::ip::tcp::resolver resolver(context);
+
         boost::beast::tcp_stream stream(context);
         const auto endpoint = stream.connect(boost::asio::ip::tcp::resolver(context).resolve(WEBSITE, PORT));
 
@@ -68,6 +68,7 @@ int main()
         boost::beast::error_code ec;
         stream.socket().shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
 
+        //according to the examples sometimes this error can be thrown
         if (ec && ec != boost::beast::errc::not_connected)
         {
             throw boost::beast::system_error{ ec };
