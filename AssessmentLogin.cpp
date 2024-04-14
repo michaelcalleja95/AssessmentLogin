@@ -1,8 +1,5 @@
-﻿// AssessmentLogin.cpp : Defines the entry point for the application.
+﻿// AssessmentLogin.cpp : Contains all needed functionality
 //
-
-#include "AssessmentLogin.h"
-
 #include <boost/system/system_error.hpp>
 
 #include <boost/beast/core.hpp>
@@ -18,13 +15,15 @@
 
 #include <iostream>
 
-constexpr auto VERSION = 11;                            ///< http version 1.1
-constexpr auto WEBSITE = "testphp.vulnweb.com";         ///< host to connect to
-constexpr auto PORT = "80";                             ///< HTTP port
-constexpr auto TARGET = "/userinfo.php";                   ///< target site on the host
-constexpr auto CREDENTAILS = "uname=test&pass=test";    ///< payload data
+constexpr auto VERSION = 11;                                        ///< http version 1.1
+constexpr auto WEBSITE = "testphp.vulnweb.com";                     ///< host to connect to
+constexpr auto ORIGIN = "http://testphp.vulnweb.com";              ///< simulation hostname origin
+constexpr auto REFERER = "http://testphp.vulnweb.com/login.php";    ///< simulation where the request originated from
+constexpr auto PORT = "80";                                         ///< HTTP port
+constexpr auto TARGET = "/userinfo.php";                            ///< target site on the host
+constexpr auto CREDENTAILS = "uname=test&pass=test";                ///< payload data
 
-int main(int argc, char** argv)
+int main()
 {
     try
     {
@@ -37,16 +36,10 @@ int main(int argc, char** argv)
         //create request to replicate sending login credentials to the login page
         boost::beast::http::request<boost::beast::http::string_body> request{ boost::beast::http::verb::post, TARGET, VERSION };
         request.set(boost::beast::http::field::host, WEBSITE);
-        request.set(boost::beast::http::field::connection, "keep-alive");
-        request.set(boost::beast::http::field::cache_control, "max-age=0");
-        request.set(boost::beast::http::field::origin, "http://testphp.vulnweb.com");
+        request.set(boost::beast::http::field::origin, ORIGIN);
         request.set(boost::beast::http::field::content_type, "application/x-www-form-urlencoded");
         request.set(boost::beast::http::field::user_agent, BOOST_BEAST_VERSION_STRING);       
-        request.set(boost::beast::http::field::accept,"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
-        request.set(boost::beast::http::field::referer, "http://testphp.vulnweb.com/login.php");
-        request.set(boost::beast::http::field::accept_encoding, "gzip, deflate");
-        request.set(boost::beast::http::field::accept_language, "en-US,en;q=0.9");
-        request.set(boost::beast::http::field::cookie, "login=test%2Ftest");
+        request.set(boost::beast::http::field::referer, REFERER);
         request.body() = CREDENTAILS;
         request.prepare_payload();
 

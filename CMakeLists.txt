@@ -7,7 +7,7 @@ find_package(boost REQUIRED beast)
 
 project ("AssessmentLogin")
 
-add_executable (LoginAssessment "AssessmentLogin.cpp" "AssessmentLogin.h")
+add_executable (LoginAssessment "AssessmentLogin.cpp" )
 
 include_directories( ${Boost_INCLUDE_DIR} )
 
