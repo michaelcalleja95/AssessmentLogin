@@ -10,4 +10,4 @@ add_executable (LoginAssessment "AssessmentLogin.cpp" )
 
 include_directories( ${Boost_INCLUDE_DIR} )
 
-set_property(TARGET LoginAssessment PROPERTY CXX_STANDARD 20)
+set_property(TARGET LoginAssessment PROPERTY CXX_STANDARD 17)
