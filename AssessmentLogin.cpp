@@ -1,19 +1,26 @@
 ﻿// AssessmentLogin.cpp : Contains all needed functionality
 //
-#include <boost/system/system_error.hpp>
+#include <boost/beast/http/string_body.hpp>
+#include <boost/beast/http/message.hpp>
+#include <boost/beast/http/dynamic_body.hpp>
+#include <boost/beast/http/write.hpp>
+#include <boost/beast/http/read.hpp>
 
-#include <boost/beast/core.hpp>
-#include <boost/beast/http.hpp>
+#include <boost/beast/core/tcp_stream.hpp>
+#include <boost/beast/core/flat_buffer.hpp>
+#include <boost/beast/core/buffers_to_string.hpp>
+#include <boost/beast/core/basic_stream.hpp>
+
 #include <boost/beast/version.hpp>
 
 #include <boost/asio/connect.hpp>
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
 
-#include <boost/iostreams/filter/gzip.hpp>
-#include <boost/iostreams/filtering_stream.hpp>
+#include <boost/system/system_error.hpp>
 
 #include <iostream>
+#include <string>
 
 constexpr auto VERSION = 11;                                        ///< http version 1.1
 constexpr auto WEBSITE = "testphp.vulnweb.com";                     ///< host to connect to
@@ -51,7 +58,11 @@ int main()
 
         //reads and outputs response
         boost::beast::http::read(stream, buffer, response);
-        std::cout << response << std::endl;
+
+        //return just the html body as requested
+        const std::string responseHTML(boost::beast::buffers_to_string(response.body().data()));
+
+        std::cout << responseHTML << std::endl;
 
         //cleanup
         boost::beast::error_code ec;
@@ -61,6 +72,8 @@ int main()
         {
             throw boost::beast::system_error{ ec };
         }
+
+        return EXIT_SUCCESS;
     }
     catch (boost::system::system_error const& e)
     {

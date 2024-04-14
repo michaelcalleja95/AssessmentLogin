@@ -1,7 +1,6 @@
 ﻿cmake_minimum_required (VERSION 3.12)
 
 set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "vcpkg_installed/x64-windows/include")
-#SET(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "vcpkg_installed/x64-windows/lib")
 
 find_package(boost REQUIRED beast)
 
